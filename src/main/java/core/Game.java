@@ -821,7 +821,7 @@ public class Game {
      * and then run this class.
      */
     public static void main(String[] args) {
-        String gameType = Utils.getArg(args, "game", "Pandemic");
+        String gameType = Utils.getArg(args, "game", "Uno");
         boolean useGUI = Utils.getArg(args, "gui", true);
         int turnPause = Utils.getArg(args, "turnPause", 0);
         long seed = Utils.getArg(args, "seed", System.currentTimeMillis());
@@ -829,6 +829,7 @@ public class Game {
 
         /* Set up players for the game */
         ArrayList<AbstractPlayer> players = new ArrayList<>();
+        players.add(new HumanGUIPlayer(ac));
         players.add(new RandomPlayer());
         players.add(new RandomPlayer());
         players.add(new BasicMCTSPlayer());
@@ -859,7 +860,7 @@ public class Game {
 //        ArrayList<GameType> games = new ArrayList<>();
 //        games.add(Connect4);
 //        runMany(games, players, 100L, 5, false, false, null, turnPause);
-//        runMany(new ArrayList<GameType>() {{add(Uno);}}, players, 100L, 100, false, false, null, turnPause);
+//        runMany(new ArrayList<GameType>() {{add(Uno); add(Pandemic);}}, players, 100L, 100, false, false, null, turnPause);
     }
 
 }
