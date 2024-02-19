@@ -141,12 +141,59 @@ public class JaipurGameState extends AbstractGameState {
             // TODO: Count how many cards each player has in their hands in total.
             // TODO: Add new JaipurCard objects of the corresponding type to the *copy draw deck*, as many as the player has in their hand.
             // TODO: After going through all the players, shuffle the *copy draw deck*.
+            for (int i = 0; i < getNPlayers(); i++) {
+                if (i != playerId) {
+                    // Hide the cards in the opponent player's hands
+                    for (JaipurCard.GoodType gt: playerHands.get(i).keySet()) {
+                        copy.playerHands.get(i).get(gt).setValue(0);
+                    }
 
+                    // Count how many cards the opponent has in their hands in total
+                    int numCardsInHand = playerHands.get(i).values().stream().mapToInt(Counter::getValue).sum();
+
+                    // Add new JaipurCard objects of the corresponding type to the copy draw deck, as many as the opponent has in their hand
+                    for (int j = 0; j < numCardsInHand; j++) {
+                        JaipurCard card = new JaipurCard(JaipurCard.GoodType.Camel); // You can choose any type here
+                        copy.drawDeck.add(card, copy.drawDeck.getSize());
+                    }
+                }
+            }
+
+/*
             // Then draw new cards for opponent
             // TODO: Iterate through the players. If they're the `playerId` observing the state (passed as argument to this method), copy the exact hand of the player into the *copy game state*
             // TODO: Otherwise, draw new cards from the *copy draw deck* and update the *copy player hand* appropriately (you can check this same functionality in the round setup performed in the Forward Model for help)
             // TODO: Make sure to ignore camels, and put them back at the bottom of the *copy draw deck*, e.g. copy.drawDeck.add(card,copy.drawDeck.getSize()); Camels don't stay in player's hands, so we're only filling hands with non-camel cards
             // TODO: At the end of this process, reshuffle the *copy draw deck* to make sure any camels that were drawn and put back are randomly distributed too
+            // Draw new cards for opponents
+            for (int i = 0; i < getNPlayers(); i++) {
+                if (i != playerId) {
+                    // Draw new cards from the copy draw deck and update the copy player hand appropriately
+                    for (JaipurCard.GoodType gt : playerHands.get(i).keySet()) {
+                        int numCards = playerHands.get(i).get(gt).getValue();
+                        for (int j = 0; j < numCards; j++) {
+                            JaipurCard drawnCard = copy.drawDeck.draw();
+                            if (drawnCard.goodType == JaipurCard.GoodType.Camel) {
+                                copy.drawDeck.add(drawnCard, copy.drawDeck.getSize());
+                            }
+                            else if (drawnCard != null) {
+                                copy.playerHands.get(i).get(gt).increment(1);
+                            }
+                        }
+                    }
+
+                    // Put camels back at the bottom of the copy draw deck
+                    while (copy.drawDeck.getSize() != 0) {
+                        JaipurCard card = copy.drawDeck.draw();
+                        if (card.goodType == JaipurCard.GoodType.Camel) {
+                            copy.drawDeck.add(card, copy.drawDeck.getSize());
+                        }
+                    }
+                }
+            }
+
+            // Reshuffle the copy draw deck to make sure any camels that were drawn and put back are randomly distributed too
+            copy.drawDeck.shuffle(r);*/
         }
         return copy;
     }
