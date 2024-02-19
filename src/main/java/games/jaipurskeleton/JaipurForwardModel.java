@@ -295,8 +295,8 @@ public class JaipurForwardModel extends StandardForwardModel {
             for (JaipurCard.GoodType gt: jgs.market.keySet()) {
                 if (jgs.market.get(gt).getValue() > 0 && gt != Camel) {
                     int amount = jgs.market.get(gt).getValue();
-                    ImmutableMap<JaipurCard.GoodType, Integer> goodmap = ImmutableMap.of(gt, amount);
-
+                    //ImmutableMap<JaipurCard.GoodType, Integer> goodmap = ImmutableMap.of(gt, amount);
+                    ImmutableMap<JaipurCard.GoodType, Integer> goodmap = ImmutableMap.of(gt, 1);
                     actions.add(new TakeCards(goodmap, null, jgs.getCurrentPlayer()));
                 }
             }
